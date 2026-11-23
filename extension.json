@@ -1,0 +1,17 @@
+{
+  "name": "rdp",
+  "version": "1.0.0",
+  "publisher": "chenzhi",
+  "description": "远程桌面：连接管理，打开时用 mstsc 连接",
+  "main": "extension.py",
+  "icon": "main.svg",
+  "activationEvents": [
+    "onStartup"
+  ],
+  "contributes": {
+    "app": {
+      "id": "rdp.app",
+      "title": "远程桌面"
+    }
+  }
+}

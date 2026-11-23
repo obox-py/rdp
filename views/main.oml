@@ -1,0 +1,216 @@
+<Div id="rdp-root">
+  <Flex id="rdp-toolbar" direction="row" align="center" gap="8">
+    <Input id="rdp-search" placeholder="{{i18n.rdp.search}}" value="{{query}}" on_input="true" grow="1" />
+    <Button id="rdp-new" text="{{i18n.rdp.new}}" type="primary" on_click="true" />
+  </Flex>
+  <Alert id="st-windows" o-if="status == 'windowsOnly'" text="{{i18n.rdp.windowsonly}}" type="warn" />
+  <Alert id="st-no-mstsc" o-if="status == 'noMstsc'" text="{{i18n.rdp.nomstsc}}" type="error" />
+  <Alert id="st-opened" o-if="status == 'opened'" text="{{i18n.rdp.opened}}" type="info" />
+  <Alert id="st-confirm" o-if="status == 'confirmDelete'" text="{{i18n.rdp.confirmdelete}} {{pendingName}}" type="warn" />
+  <Div id="rdp-list">
+    <Card id="conn-{{item.id}}" o-for="item in items">
+      <Text id="conn-title-{{item.id}}" text="{{item.title}}" size="14" />
+      <Text id="conn-sub-{{item.id}}" text="{{item.subtitle}}" size="12" />
+      <Flex id="conn-actions-{{item.id}}" direction="row" gap="8">
+        <Button id="open-{{item.id}}" text="{{i18n.rdp.open}}" type="primary" on_click="true" />
+        <Button id="edit-{{item.id}}" text="{{i18n.rdp.edit}}" on_click="true" />
+        <Button id="del-{{item.id}}" text="{{i18n.rdp.delete}}" type="danger" on_click="true" />
+      </Flex>
+    </Card>
+    <Text id="rdp-empty" text="{{i18n.rdp.empty}}" o-if="empty" />
+  </Div>
+  <Modal id="conn-modal" title="{{i18n.rdp.formtitle}}" width="520" height="560" close_on_overlay="true">
+    <Text id="t-name" text="{{i18n.rdp.name}}" size="12" />
+    <Input id="conn-name" placeholder="{{i18n.rdp.name}}" value="{{form.name}}" on_input="true" />
+    <Text id="t-host" text="{{i18n.rdp.host}}" size="12" />
+    <Input id="conn-host" placeholder="{{i18n.rdp.host}}" value="{{form.host}}" on_input="true" />
+    <Text id="t-port" text="{{i18n.rdp.port}}" size="12" />
+    <Input id="conn-port" placeholder="{{i18n.rdp.port}}" value="{{form.port}}" on_input="true" />
+    <Collapse id="group-account" title="{{i18n.rdp.g.account}}" open="true">
+      <Text id="t-username" text="{{i18n.rdp.f.username}}" size="12" />
+      <Input id="f-username" placeholder="{{i18n.rdp.f.username}}" value="{{form.username}}" on_input="true" />
+      <Text id="t-password" text="{{i18n.rdp.password}}" size="12" />
+      <Input id="conn-password" placeholder="{{i18n.rdp.password}}" password="true" on_input="true" />
+      <Flex id="conn-remember-row" direction="row" align="center" gap="8">
+        <Switch id="conn-remember" checked="{{form.remember}}" on_checkedchange="true" />
+        <Text id="conn-remember-label" text="{{i18n.rdp.remember}}" size="14" />
+      </Flex>
+      <Text id="t-domain" text="{{i18n.rdp.f.domain}}" size="12" />
+      <Input id="f-domain" placeholder="{{i18n.rdp.f.domain}}" value="{{form.domain}}" on_input="true" />
+    </Collapse>
+    <Collapse id="group-display" title="{{i18n.rdp.g.display}}" open="false">
+      <Flex id="row-fullscreen" direction="row" align="center" gap="8">
+        <Switch id="f-fullscreen" checked="{{form.fullscreen}}" on_checkedchange="true" />
+        <Text id="label-fullscreen" text="{{i18n.rdp.f.fullscreen}}" size="14" />
+      </Flex>
+      <Flex id="row-multimon" direction="row" align="center" gap="8">
+        <Switch id="f-multimon" checked="{{form.multimon}}" on_checkedchange="true" />
+        <Text id="label-multimon" text="{{i18n.rdp.f.multimon}}" size="14" />
+      </Flex>
+      <Text id="t-desktopWidth" text="{{i18n.rdp.f.desktopwidth}}" size="12" />
+      <Input id="f-desktopWidth" placeholder="{{i18n.rdp.f.desktopwidth}}" value="{{form.desktopWidth}}" on_input="true" />
+      <Text id="t-desktopHeight" text="{{i18n.rdp.f.desktopheight}}" size="12" />
+      <Input id="f-desktopHeight" placeholder="{{i18n.rdp.f.desktopheight}}" value="{{form.desktopHeight}}" on_input="true" />
+      <Flex id="row-smartSizing" direction="row" align="center" gap="8">
+        <Switch id="f-smartSizing" checked="{{form.smartSizing}}" on_checkedchange="true" />
+        <Text id="label-smartSizing" text="{{i18n.rdp.f.smartsizing}}" size="14" />
+      </Flex>
+      <Flex id="row-dynamicResolution" direction="row" align="center" gap="8">
+        <Switch id="f-dynamicResolution" checked="{{form.dynamicResolution}}" on_checkedchange="true" />
+        <Text id="label-dynamicResolution" text="{{i18n.rdp.f.dynamicresolution}}" size="14" />
+      </Flex>
+      <Text id="t-sessionBpp" text="{{i18n.rdp.f.sessionbpp}}" size="12" />
+      <Select id="f-sessionBpp" options="8,16,24,32" value="{{form.sessionBpp}}" on_change="true" />
+      <Text id="t-selectedMonitors" text="{{i18n.rdp.f.selectedmonitors}}" size="12" />
+      <Input id="f-selectedMonitors" placeholder="{{i18n.rdp.f.selectedmonitors}}" value="{{form.selectedMonitors}}" on_input="true" />
+      <Flex id="row-maximizeToCurrentDisplays" direction="row" align="center" gap="8">
+        <Switch id="f-maximizeToCurrentDisplays" checked="{{form.maximizeToCurrentDisplays}}" on_checkedchange="true" />
+        <Text id="label-maximizeToCurrentDisplays" text="{{i18n.rdp.f.maximizetocurrentdisplays}}" size="14" />
+      </Flex>
+      <Flex id="row-singleMonInWindowedMode" direction="row" align="center" gap="8">
+        <Switch id="f-singleMonInWindowedMode" checked="{{form.singleMonInWindowedMode}}" on_checkedchange="true" />
+        <Text id="label-singleMonInWindowedMode" text="{{i18n.rdp.f.singlemoninwindowedmode}}" size="14" />
+      </Flex>
+    </Collapse>
+    <Collapse id="group-connection" title="{{i18n.rdp.g.connection}}" open="false">
+      <Flex id="row-promptForCredentials" direction="row" align="center" gap="8">
+        <Switch id="f-promptForCredentials" checked="{{form.promptForCredentials}}" on_checkedchange="true" />
+        <Text id="label-promptForCredentials" text="{{i18n.rdp.f.promptforcredentials}}" size="14" />
+      </Flex>
+      <Text id="t-authenticationLevel" text="{{i18n.rdp.f.authenticationlevel}}" size="12" />
+      <Select id="f-authenticationLevel" options="0,1,2,3" value="{{form.authenticationLevel}}" on_change="true" />
+      <Flex id="row-nla" direction="row" align="center" gap="8">
+        <Switch id="f-nla" checked="{{form.nla}}" on_checkedchange="true" />
+        <Text id="label-nla" text="{{i18n.rdp.f.nla}}" size="14" />
+      </Flex>
+      <Flex id="row-adminSession" direction="row" align="center" gap="8">
+        <Switch id="f-adminSession" checked="{{form.adminSession}}" on_checkedchange="true" />
+        <Text id="label-adminSession" text="{{i18n.rdp.f.adminsession}}" size="14" />
+      </Flex>
+      <Flex id="row-autoReconnect" direction="row" align="center" gap="8">
+        <Switch id="f-autoReconnect" checked="{{form.autoReconnect}}" on_checkedchange="true" />
+        <Text id="label-autoReconnect" text="{{i18n.rdp.f.autoreconnect}}" size="14" />
+      </Flex>
+      <Text id="t-gatewayHostname" text="{{i18n.rdp.f.gatewayhostname}}" size="12" />
+      <Input id="f-gatewayHostname" placeholder="{{i18n.rdp.f.gatewayhostname}}" value="{{form.gatewayHostname}}" on_input="true" />
+      <Text id="t-gatewayUsageMethod" text="{{i18n.rdp.f.gatewayusagemethod}}" size="12" />
+      <Select id="f-gatewayUsageMethod" options="0,1,2,3,4" value="{{form.gatewayUsageMethod}}" on_change="true" />
+      <Text id="t-gatewayCredentialsSource" text="{{i18n.rdp.f.gatewaycredentialssource}}" size="12" />
+      <Select id="f-gatewayCredentialsSource" options="0,1,2,3,4,5" value="{{form.gatewayCredentialsSource}}" on_change="true" />
+      <Flex id="row-promptCredentialOnce" direction="row" align="center" gap="8">
+        <Switch id="f-promptCredentialOnce" checked="{{form.promptCredentialOnce}}" on_checkedchange="true" />
+        <Text id="label-promptCredentialOnce" text="{{i18n.rdp.f.promptcredentialonce}}" size="14" />
+      </Flex>
+      <Flex id="row-negotiateSecurityLayer" direction="row" align="center" gap="8">
+        <Switch id="f-negotiateSecurityLayer" checked="{{form.negotiateSecurityLayer}}" on_checkedchange="true" />
+        <Text id="label-negotiateSecurityLayer" text="{{i18n.rdp.f.negotiatesecuritylayer}}" size="14" />
+      </Flex>
+      <Flex id="row-disableConnectionSharing" direction="row" align="center" gap="8">
+        <Switch id="f-disableConnectionSharing" checked="{{form.disableConnectionSharing}}" on_checkedchange="true" />
+        <Text id="label-disableConnectionSharing" text="{{i18n.rdp.f.disableconnectionsharing}}" size="14" />
+      </Flex>
+    </Collapse>
+    <Collapse id="group-audio" title="{{i18n.rdp.g.audio}}" open="false">
+      <Text id="t-audioMode" text="{{i18n.rdp.f.audiomode}}" size="12" />
+      <Select id="f-audioMode" options="0,1,2" value="{{form.audioMode}}" on_change="true" />
+      <Flex id="row-audioCaptureMode" direction="row" align="center" gap="8">
+        <Switch id="f-audioCaptureMode" checked="{{form.audioCaptureMode}}" on_checkedchange="true" />
+        <Text id="label-audioCaptureMode" text="{{i18n.rdp.f.audiocapturemode}}" size="14" />
+      </Flex>
+    </Collapse>
+    <Collapse id="group-redirect" title="{{i18n.rdp.g.redirect}}" open="false">
+      <Flex id="row-clipboard" direction="row" align="center" gap="8">
+        <Switch id="f-clipboard" checked="{{form.clipboard}}" on_checkedchange="true" />
+        <Text id="label-clipboard" text="{{i18n.rdp.f.clipboard}}" size="14" />
+      </Flex>
+      <Flex id="row-redirectPrinters" direction="row" align="center" gap="8">
+        <Switch id="f-redirectPrinters" checked="{{form.redirectPrinters}}" on_checkedchange="true" />
+        <Text id="label-redirectPrinters" text="{{i18n.rdp.f.redirectprinters}}" size="14" />
+      </Flex>
+      <Flex id="row-redirectComPorts" direction="row" align="center" gap="8">
+        <Switch id="f-redirectComPorts" checked="{{form.redirectComPorts}}" on_checkedchange="true" />
+        <Text id="label-redirectComPorts" text="{{i18n.rdp.f.redirectcomports}}" size="14" />
+      </Flex>
+      <Flex id="row-redirectSmartCards" direction="row" align="center" gap="8">
+        <Switch id="f-redirectSmartCards" checked="{{form.redirectSmartCards}}" on_checkedchange="true" />
+        <Text id="label-redirectSmartCards" text="{{i18n.rdp.f.redirectsmartcards}}" size="14" />
+      </Flex>
+      <Flex id="row-redirectLocation" direction="row" align="center" gap="8">
+        <Switch id="f-redirectLocation" checked="{{form.redirectLocation}}" on_checkedchange="true" />
+        <Text id="label-redirectLocation" text="{{i18n.rdp.f.redirectlocation}}" size="14" />
+      </Flex>
+      <Flex id="row-redirectWebAuthn" direction="row" align="center" gap="8">
+        <Switch id="f-redirectWebAuthn" checked="{{form.redirectWebAuthn}}" on_checkedchange="true" />
+        <Text id="label-redirectWebAuthn" text="{{i18n.rdp.f.redirectwebauthn}}" size="14" />
+      </Flex>
+      <Text id="t-driveStoreDirect" text="{{i18n.rdp.f.drivestoredirect}}" size="12" />
+      <Input id="f-driveStoreDirect" placeholder="{{i18n.rdp.f.drivestoredirect}}" value="{{form.driveStoreDirect}}" on_input="true" />
+      <Text id="t-usbDeviceStoreDirect" text="{{i18n.rdp.f.usbdevicestoredirect}}" size="12" />
+      <Input id="f-usbDeviceStoreDirect" placeholder="{{i18n.rdp.f.usbdevicestoredirect}}" value="{{form.usbDeviceStoreDirect}}" on_input="true" />
+      <Text id="t-deviceStoreDirect" text="{{i18n.rdp.f.devicestoredirect}}" size="12" />
+      <Input id="f-deviceStoreDirect" placeholder="{{i18n.rdp.f.devicestoredirect}}" value="{{form.deviceStoreDirect}}" on_input="true" />
+      <Text id="t-cameraStoreDirect" text="{{i18n.rdp.f.camerastoredirect}}" size="12" />
+      <Input id="f-cameraStoreDirect" placeholder="{{i18n.rdp.f.camerastoredirect}}" value="{{form.cameraStoreDirect}}" on_input="true" />
+    </Collapse>
+    <Collapse id="group-experience" title="{{i18n.rdp.g.experience}}" open="false">
+      <Text id="t-keyboardHook" text="{{i18n.rdp.f.keyboardhook}}" size="12" />
+      <Select id="f-keyboardHook" options="0,1,2,3,4" value="{{form.keyboardHook}}" on_change="true" />
+      <Flex id="row-networkAutoDetect" direction="row" align="center" gap="8">
+        <Switch id="f-networkAutoDetect" checked="{{form.networkAutoDetect}}" on_checkedchange="true" />
+        <Text id="label-networkAutoDetect" text="{{i18n.rdp.f.networkautodetect}}" size="14" />
+      </Flex>
+      <Flex id="row-bandwidthAutoDetect" direction="row" align="center" gap="8">
+        <Switch id="f-bandwidthAutoDetect" checked="{{form.bandwidthAutoDetect}}" on_checkedchange="true" />
+        <Text id="label-bandwidthAutoDetect" text="{{i18n.rdp.f.bandwidthautodetect}}" size="14" />
+      </Flex>
+      <Flex id="row-compression" direction="row" align="center" gap="8">
+        <Switch id="f-compression" checked="{{form.compression}}" on_checkedchange="true" />
+        <Text id="label-compression" text="{{i18n.rdp.f.compression}}" size="14" />
+      </Flex>
+      <Flex id="row-videoPlaybackMode" direction="row" align="center" gap="8">
+        <Switch id="f-videoPlaybackMode" checked="{{form.videoPlaybackMode}}" on_checkedchange="true" />
+        <Text id="label-videoPlaybackMode" text="{{i18n.rdp.f.videoplaybackmode}}" size="14" />
+      </Flex>
+      <Flex id="row-bitmapCachePersistEnable" direction="row" align="center" gap="8">
+        <Switch id="f-bitmapCachePersistEnable" checked="{{form.bitmapCachePersistEnable}}" on_checkedchange="true" />
+        <Text id="label-bitmapCachePersistEnable" text="{{i18n.rdp.f.bitmapcachepersistenable}}" size="14" />
+      </Flex>
+      <Flex id="row-disableWallpaper" direction="row" align="center" gap="8">
+        <Switch id="f-disableWallpaper" checked="{{form.disableWallpaper}}" on_checkedchange="true" />
+        <Text id="label-disableWallpaper" text="{{i18n.rdp.f.disablewallpaper}}" size="14" />
+      </Flex>
+      <Flex id="row-allowFontSmoothing" direction="row" align="center" gap="8">
+        <Switch id="f-allowFontSmoothing" checked="{{form.allowFontSmoothing}}" on_checkedchange="true" />
+        <Text id="label-allowFontSmoothing" text="{{i18n.rdp.f.allowfontsmoothing}}" size="14" />
+      </Flex>
+      <Flex id="row-allowDesktopComposition" direction="row" align="center" gap="8">
+        <Switch id="f-allowDesktopComposition" checked="{{form.allowDesktopComposition}}" on_checkedchange="true" />
+        <Text id="label-allowDesktopComposition" text="{{i18n.rdp.f.allowdesktopcomposition}}" size="14" />
+      </Flex>
+      <Flex id="row-disableFullWindowDrag" direction="row" align="center" gap="8">
+        <Switch id="f-disableFullWindowDrag" checked="{{form.disableFullWindowDrag}}" on_checkedchange="true" />
+        <Text id="label-disableFullWindowDrag" text="{{i18n.rdp.f.disablefullwindowdrag}}" size="14" />
+      </Flex>
+      <Flex id="row-disableMenuAnims" direction="row" align="center" gap="8">
+        <Switch id="f-disableMenuAnims" checked="{{form.disableMenuAnims}}" on_checkedchange="true" />
+        <Text id="label-disableMenuAnims" text="{{i18n.rdp.f.disablemenuanims}}" size="14" />
+      </Flex>
+      <Flex id="row-disableThemes" direction="row" align="center" gap="8">
+        <Switch id="f-disableThemes" checked="{{form.disableThemes}}" on_checkedchange="true" />
+        <Text id="label-disableThemes" text="{{i18n.rdp.f.disablethemes}}" size="14" />
+      </Flex>
+      <Flex id="row-disableCursorSetting" direction="row" align="center" gap="8">
+        <Switch id="f-disableCursorSetting" checked="{{form.disableCursorSetting}}" on_checkedchange="true" />
+        <Text id="label-disableCursorSetting" text="{{i18n.rdp.f.disablecursorsetting}}" size="14" />
+      </Flex>
+    </Collapse>
+    <Button id="conn-cancel" text="{{i18n.rdp.cancel}}" on_click="true" />
+    <Button id="conn-save" text="{{i18n.rdp.save}}" type="primary" on_click="true" />
+  </Modal>
+  <Modal id="confirm-modal" title="{{i18n.rdp.deleteconfirmtitle}}" variant="confirm" width="420" close_on_overlay="true">
+    <Text id="confirm-line" text="{{i18n.rdp.deleteconfirm}}" size="14" />
+    <Text id="confirm-name" text="{{pendingName}}" size="16" weight="600" />
+    <Button id="delete-cancel" text="{{i18n.rdp.cancel}}" on_click="true" />
+    <Button id="delete-ok" text="{{i18n.rdp.delete}}" type="danger" on_click="true" />
+  </Modal>
+</Div>
